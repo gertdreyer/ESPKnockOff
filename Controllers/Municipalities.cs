@@ -27,14 +27,14 @@ namespace TodoApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Municipality>> GetMunicipality(int id)
         {
-            var province = await _context.Municipality.FindAsync(id);
+            var municipality = await _context.Municipality.FindAsync(id);
 
-            if (province == null)
+            if (municipality == null)
             {
                 return NotFound();
             }
 
-            return province;
+            return municipality;
         }
     }
 }
