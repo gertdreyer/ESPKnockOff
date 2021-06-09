@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TodoApi.Models;
+using ESPKnockOff.Models;
 
-namespace TodoApi.Migrations
+namespace ESPKnockOff.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
     [Migration("20210608212802_Initial_1")]
@@ -21,7 +21,7 @@ namespace TodoApi.Migrations
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TodoApi.Models.LoadSheddingSlot", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.LoadSheddingSlot", b =>
                 {
                     b.Property<int>("LoadSheddingSlotID")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace TodoApi.Migrations
                     b.ToTable("LoadSheddingSlot");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.Municipality", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.Municipality", b =>
                 {
                     b.Property<int>("MunicipalityID")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,7 @@ namespace TodoApi.Migrations
                     b.ToTable("Municipality");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.Province", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.Province", b =>
                 {
                     b.Property<int>("ProvinceID")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,7 @@ namespace TodoApi.Migrations
                     b.ToTable("Province");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.Suburb", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.Suburb", b =>
                 {
                     b.Property<int>("SuburbID")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace TodoApi.Migrations
                     b.ToTable("Suburb");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.SuburbCluster", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.SuburbCluster", b =>
                 {
                     b.Property<int>("SuburbClusterID")
                         .ValueGeneratedOnAdd()
@@ -120,7 +120,7 @@ namespace TodoApi.Migrations
                     b.ToTable("SuburbCluster");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.TimeCode", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.TimeCode", b =>
                 {
                     b.Property<int>("TimeCodeID")
                         .ValueGeneratedOnAdd()
@@ -138,15 +138,15 @@ namespace TodoApi.Migrations
                     b.ToTable("TimeCode");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.LoadSheddingSlot", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.LoadSheddingSlot", b =>
                 {
-                    b.HasOne("TodoApi.Models.SuburbCluster", "SuburbCluster")
+                    b.HasOne("ESPKnockOff.Models.SuburbCluster", "SuburbCluster")
                         .WithMany("LoadSheddingSlot")
                         .HasForeignKey("SuburbClusterID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TodoApi.Models.TimeCode", "TimeCode")
+                    b.HasOne("ESPKnockOff.Models.TimeCode", "TimeCode")
                         .WithMany()
                         .HasForeignKey("TimeCodeID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -157,9 +157,9 @@ namespace TodoApi.Migrations
                     b.Navigation("TimeCode");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.Municipality", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.Municipality", b =>
                 {
-                    b.HasOne("TodoApi.Models.Province", "Province")
+                    b.HasOne("ESPKnockOff.Models.Province", "Province")
                         .WithMany("Municipality")
                         .HasForeignKey("ProvinceID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -168,15 +168,15 @@ namespace TodoApi.Migrations
                     b.Navigation("Province");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.Suburb", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.Suburb", b =>
                 {
-                    b.HasOne("TodoApi.Models.Municipality", "Municipality")
+                    b.HasOne("ESPKnockOff.Models.Municipality", "Municipality")
                         .WithMany("Suburb")
                         .HasForeignKey("MunicipalityID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TodoApi.Models.SuburbCluster", "SuburbCluster")
+                    b.HasOne("ESPKnockOff.Models.SuburbCluster", "SuburbCluster")
                         .WithMany("Suburb")
                         .HasForeignKey("SuburbClusterID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -187,17 +187,17 @@ namespace TodoApi.Migrations
                     b.Navigation("SuburbCluster");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.Municipality", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.Municipality", b =>
                 {
                     b.Navigation("Suburb");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.Province", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.Province", b =>
                 {
                     b.Navigation("Municipality");
                 });
 
-            modelBuilder.Entity("TodoApi.Models.SuburbCluster", b =>
+            modelBuilder.Entity("ESPKnockOff.Models.SuburbCluster", b =>
                 {
                     b.Navigation("LoadSheddingSlot");
 

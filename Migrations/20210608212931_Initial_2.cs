@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TodoApi.Migrations
+namespace ESPKnockOff.Migrations
 {
     public partial class Initial_2 : Migration
     {

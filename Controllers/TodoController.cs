@@ -7,13 +7,15 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using TodoApi.Models;
+using ESPKnockOff.Models;
 
-namespace TodoApi.Controllers {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class TodoController : Controller {
-		/*private readonly ApplicationContext _context;
+namespace ESPKnockOff.Control
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TodoController : Controller
+    {
+        /*private readonly ApplicationContext _context;
 
 		public TodoController(ApplicationContext context) {
 			_context = context;
@@ -94,5 +96,5 @@ namespace TodoApi.Controllers {
 		private bool TodoItemExists(long id) {
 			return _context.TodoItems.Any(e => e.Id == id);
 		}*/
-	}
+    }
 }
