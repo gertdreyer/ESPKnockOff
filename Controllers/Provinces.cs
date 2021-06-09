@@ -36,5 +36,13 @@ namespace ESPKnockOff.Controllers
 
             return province;
         }
+
+        [HttpGet("{id}/municipalities")]
+        public async Task<ActionResult<List<Municipalities>>> GetProvinceMunicipalities(int id)
+        {
+            // TODO: Get municipalities in province.
+            var municipalities = new List<Municipalities>();
+            return municipalities;
+        }
     }
 }

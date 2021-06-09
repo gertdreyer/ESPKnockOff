@@ -36,5 +36,18 @@ namespace ESPKnockOff.Controllers
 
             return suburb;
         }
+
+        [HttpGet("{id}/schedules")]
+        public async Task<ActionResult> GetSuburbSchedules(int id, int stage, int day, int startTime, int endTime)
+        {
+            // TODO: Get and returl all the schedules in a suburb based on the query paramaters.
+            return Ok(new {
+                id = 1,
+                day = day,
+                stage = stage,
+                startTime = startTime,
+                endTime = endTime,
+            });
+        }
     }
 }

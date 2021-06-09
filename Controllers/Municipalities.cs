@@ -36,5 +36,13 @@ namespace ESPKnockOff.Controllers
 
             return municipality;
         }
+
+        [HttpGet("{id}/suburbs")]
+        public async Task<ActionResult<List<Suburb>>> GetMunicipalitySuburbs(int id)
+        {
+            // TODO: Get suburbs in municipality.
+            var suburbs = new List<Suburb>();
+            return suburbs;
+        }
     }
 }
