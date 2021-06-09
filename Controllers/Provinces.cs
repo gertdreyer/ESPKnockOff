@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TodoApi.Models;
+using ESPKnockOff.Models;
 
-namespace TodoApi.Controllers
+namespace ESPKnockOff.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -35,6 +35,14 @@ namespace TodoApi.Controllers
             }
 
             return province;
+        }
+
+        [HttpGet("{id}/municipalities")]
+        public async Task<ActionResult<List<Municipalities>>> GetProvinceMunicipalities(int id)
+        {
+            // TODO: Get municipalities in province.
+            var municipalities = new List<Municipalities>();
+            return municipalities;
         }
     }
 }
