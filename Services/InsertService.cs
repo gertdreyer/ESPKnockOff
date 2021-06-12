@@ -3,75 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESPKnockOff.Models;
+using ESPKnockOff.Services.Inserters;
 
 namespace ESPKnockOff.Services
 {
-   public class InsertService
-   {
-      private Inserter _inserterChain;
-      public InsertService()
-      {
-         _inserterChain = new ProvinceInserter();
-         //_inserterChain.SetNextInserter(new MunicplaityInserter())
-      }
+    public class InsertService
+    {
+        private Inserter _inserterChain;
 
-      public void Insert(Object obj)
-      {
-         _inserterChain.HandleInsert(obj);
-      }
-   }
+        public InsertService()
+        {
+            _inserterChain = new ProvinceInserter();
+            _inserterChain.SetNextInserter(new MunicipalityInserter()).SetNextInserter(new SuburbInserter());
+        }
 
-   public abstract class Inserter
-   {
-      public Inserter()
-      {
-         _nextInserter = null;
-      }
+        public void Insert(object obj)
+        {
+            _inserterChain.HandleInsert(obj);
+        }
 
-      private Inserter _nextInserter;
+        public void Test()
+        {
+            // Test Code
+            Insert(new Province());
+            Insert(new Municipality());
+            Insert(new Suburb());
 
-      public Inserter SetNextInserter(Inserter inserter) 
-      {
-         if(_nextInserter == null)
-         {
-            _nextInserter = inserter;
-         }
-         else
-         {
-            _nextInserter.SetNextInserter(inserter);
-         }
-         return inserter;
-      }
-
-      public void NextInserterHandle(Object obj)
-      {
-         if(_nextInserter != null)
-         {
-            _nextInserter.HandleInsert(obj);
-         }
-         else
-         {
-            //ERROR
-         }
-      }
-
-      public abstract void HandleInsert(Object obj);
-   }
-
-   public class ProvinceInserter : Inserter
-   {
-      public override void HandleInsert(object obj)
-      {
-         if(obj is Province)
-         {
-            //Insert 
-         }
-         else
-         {
-            NextInserterHandle(obj);
-         }
-      }
-   }
-
-
+            // This line should throw an error
+            //Insert(new Object());
+        }
+    }
 }

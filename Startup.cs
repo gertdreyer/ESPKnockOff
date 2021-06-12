@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ESPKnockOff.Models;
+using ESPKnockOff.Services;
 
 namespace ESPKnockOff
 {
@@ -31,6 +32,12 @@ namespace ESPKnockOff
 
             services.AddDbContext<ApplicationContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ApplicationContext")));
+
+            services.AddSingleton<InsertService>();
+
+            // Test InsertService:
+            var insertService = new InsertService();
+            insertService.Test();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
