@@ -22,6 +22,7 @@ namespace ESPKnockOff.Services
         public void Insert(object obj)
         {
             _inserterChain.HandleInsert(obj, _context);
+            _context.SaveChanges();  
         }
 
         public void Test()

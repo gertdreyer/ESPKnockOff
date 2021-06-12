@@ -42,7 +42,7 @@ namespace ESPKnockOff.Services.Inserters
 
         public override void HandleInsert(object obj, ApplicationContext context)
         {
-            throw new Exception($"No inserted able to handle object of type {obj.GetType()}");
+            throw new Exception($"No inserter able to handle object of type {obj.GetType()}");
         }
     }
 
@@ -52,8 +52,7 @@ namespace ESPKnockOff.Services.Inserters
         {
             if (obj is Province)
             {
-                // TODO: Write code to insert province object into the DB.
-                context.Province.Add((Province) obj);
+                context.Province.Add((Province)obj);
                 Console.WriteLine("Province");
             }
             else
