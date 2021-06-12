@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESPKnockOff.Models;
+using ESPKnockOff.Services;
 
 namespace ESPKnockOff.Controllers
 {
@@ -12,6 +13,7 @@ namespace ESPKnockOff.Controllers
     public class Schedules : Controller
     {
         private readonly ApplicationContext _context;
+        private readonly InsertService _insertService;
 
         public Schedules(ApplicationContext context)
         {

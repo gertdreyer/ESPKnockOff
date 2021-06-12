@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESPKnockOff.Models;
+using ESPKnockOff.Services;
 
 namespace ESPKnockOff.Controllers
 {
@@ -12,10 +13,12 @@ namespace ESPKnockOff.Controllers
     public class Suburbs : Controller
     {
         private readonly ApplicationContext _context;
+        private readonly InsertService _insertService;
 
-        public Suburbs(ApplicationContext context)
+        public Suburbs(ApplicationContext context, InsertService insertService)
         {
             _context = context;
+            _insertService = insertService;
         }
 
         [HttpGet]
@@ -48,6 +51,20 @@ namespace ESPKnockOff.Controllers
                 startTime = startTime,
                 endTime = endTime,
             });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddSuburb(Suburb suburb)
+        {
+            try
+            {
+                _insertService.Insert(suburb);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
         }
     }
 }
