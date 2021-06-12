@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESPKnockOff.Models;
+using ESPKnockOff.Services;
 
 namespace ESPKnockOff.Controllers
 {
@@ -12,10 +13,12 @@ namespace ESPKnockOff.Controllers
     public class Provinces : Controller
     {
         private readonly ApplicationContext _context;
+        private readonly InsertService _insertService;
 
-        public Provinces(ApplicationContext context)
+        public Provinces(ApplicationContext context, InsertService insertService)
         {
             _context = context;
+            _insertService = insertService;
         }
 
         [HttpGet]
@@ -43,6 +46,20 @@ namespace ESPKnockOff.Controllers
             // TODO: Get municipalities in province.
             var municipalities = new List<Municipalities>();
             return municipalities;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddProvince(Province province)
+        {
+            try
+            {
+                _insertService.Insert(province);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
         }
     }
 }

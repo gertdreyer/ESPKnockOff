@@ -34,10 +34,6 @@ namespace ESPKnockOff
                     options.UseSqlServer(Configuration.GetConnectionString("ApplicationContext")));
 
             services.AddSingleton<InsertService>();
-
-            // Test InsertService:
-            var insertService = new InsertService();
-            insertService.Test();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

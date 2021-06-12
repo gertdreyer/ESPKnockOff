@@ -21,12 +21,12 @@ namespace ESPKnockOff.Services.Inserters
             return inserter;
         }
 
-        public void NextInserterHandle(object obj)
+        public void NextInserterHandle(object obj, ApplicationContext context)
         {
-            _nextInserter.HandleInsert(obj);
+            _nextInserter.HandleInsert(obj, context);
         }
 
-        public abstract void HandleInsert(object obj);
+        public abstract void HandleInsert(object obj, ApplicationContext context);
     }
 
     public class NullInserter : Inserter
@@ -40,7 +40,7 @@ namespace ESPKnockOff.Services.Inserters
             get { return _instance; }
         }
 
-        public override void HandleInsert(object obj)
+        public override void HandleInsert(object obj, ApplicationContext context)
         {
             throw new Exception($"No inserted able to handle object of type {obj.GetType()}");
         }
@@ -48,23 +48,24 @@ namespace ESPKnockOff.Services.Inserters
 
     public class ProvinceInserter : Inserter
     {
-        public override void HandleInsert(object obj)
+        public override void HandleInsert(object obj, ApplicationContext context)
         {
             if (obj is Province)
             {
                 // TODO: Write code to insert province object into the DB.
+                context.Province.Add((Province) obj);
                 Console.WriteLine("Province");
             }
             else
             {
-                NextInserterHandle(obj);
+                NextInserterHandle(obj, context);
             }
         }
     }
 
     public class MunicipalityInserter : Inserter
     {
-        public override void HandleInsert(object obj)
+        public override void HandleInsert(object obj, ApplicationContext context)
         {
             if (obj is Municipality)
             {
@@ -73,14 +74,14 @@ namespace ESPKnockOff.Services.Inserters
             }
             else
             {
-                NextInserterHandle(obj);
+                NextInserterHandle(obj, context);
             }
         }
     }
 
     public class SuburbInserter : Inserter
     {
-        public override void HandleInsert(object obj)
+        public override void HandleInsert(object obj, ApplicationContext context)
         {
             if (obj is Suburb)
             {
@@ -89,7 +90,7 @@ namespace ESPKnockOff.Services.Inserters
             }
             else
             {
-                NextInserterHandle(obj);
+                NextInserterHandle(obj, context);
             }
         }
     }
