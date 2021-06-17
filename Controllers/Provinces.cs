@@ -12,25 +12,24 @@ namespace ESPKnockOff.Controllers
     [ApiController]
     public class Provinces : Controller
     {
-        private readonly ApplicationContext _context;
         private readonly DatabaseService _dbService;
 
-        public Provinces(ApplicationContext context, DatabaseService dbService)
+        public Provinces(DatabaseService dbService)
         {
-            _context = context;
             _dbService = dbService;
         }
 
         [HttpGet]
-        public List<Province> GetProvinces()
+        public async Task<List<Province>> GetProvinces()
         {
-            return _context.Province.ToList();
+            return await _dbService.GetObjects<Province>();
+            //return _context.Province.ToList();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Province>> GetProvince(int id)
         {
-            var province = await _context.Province.FindAsync(id);
+            var province = await _dbService.GetObjectById<Province>(id);
 
             if (province == null)
             {
