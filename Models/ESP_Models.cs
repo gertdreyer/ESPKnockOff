@@ -108,8 +108,7 @@ namespace ESPKnockOff.Models
         [JsonProperty(TypeNameHandling = TypeNameHandling.All)]
         public TimeSpan EndTime { get; set; }
 
-        public int TimeCodeID { get; set; }
-
+        public int SuburbClusterID { get; set; }
     }
 
     public class TimeCode

@@ -13,7 +13,6 @@ namespace ESPKnockOff.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class Suburbs : Controller
     {
         private readonly DatabaseService _dbService;
@@ -48,13 +47,14 @@ namespace ESPKnockOff.Controllers
             return await _dbService.GetObjectSubObjects<Suburb, Schedule>(id, new FilteringCoditions() { Day = day, Stage = stage, StartTime = startTime, Endtime = endTime });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> AddSuburb(Suburb suburb)
         {
             try
             {
-                _dbService.Insert(suburb);
-                return Ok();
+                var result = _dbService.Insert(suburb);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -62,13 +62,14 @@ namespace ESPKnockOff.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult> UpdateSuburb(Suburb suburb)
         {
             try
             {
-                _dbService.Update(suburb);
-                return Ok();
+                var result = _dbService.Update(suburb);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -76,6 +77,7 @@ namespace ESPKnockOff.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         public async Task<ActionResult> RemoveSuburb(Suburb suburb)
         {
