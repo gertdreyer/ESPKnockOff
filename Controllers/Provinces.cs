@@ -23,7 +23,6 @@ namespace ESPKnockOff.Controllers
         public async Task<List<Province>> GetProvinces()
         {
             return await _dbService.GetObjects<Province>();
-            //return _context.Province.ToList();
         }
 
         [HttpGet("{id}")]
@@ -40,11 +39,9 @@ namespace ESPKnockOff.Controllers
         }
 
         [HttpGet("{id}/municipalities")]
-        public async Task<ActionResult<List<Municipalities>>> GetProvinceMunicipalities(int id)
+        public async Task<List<Municipality>> GetProvinceMunicipalities(int id)
         {
-            // TODO: Get municipalities in province.
-            var municipalities = new List<Municipalities>();
-            return municipalities;
+            return await _dbService.GetObjectSubObjects<Province, Municipality>(id);
         }
 
         [HttpPost]

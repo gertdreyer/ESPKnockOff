@@ -64,7 +64,6 @@ namespace ESPKnockOff.Services.Getters
         {
             if (typeof(T) == typeof(Province))
             {
-                // TODO
                 var provinces = context.Province.ToList();
                 return (List<T>)Convert.ChangeType(provinces, typeof(List<T>));
             }
@@ -79,7 +78,6 @@ namespace ESPKnockOff.Services.Getters
             if (typeof(T) == typeof(Province))
             {
                 var province = await context.Province.FindAsync(id);
-                // TODO
                 return (T)Convert.ChangeType(province, typeof(T));
             }
             else
