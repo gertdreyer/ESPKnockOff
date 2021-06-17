@@ -7,11 +7,14 @@ using ESPKnockOff.Models;
 using ESPKnockOff.Services;
 using System.Net.Http;
 using ESPKnockOff.Models.Enums;
+using ESPKnockOff.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ESPKnockOff.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class Schedules : Controller
     {
         private readonly ApplicationContext _context;
@@ -23,19 +26,17 @@ namespace ESPKnockOff.Controllers
             _dbService = dbService;
         }
 
-        [HttpGet]
-        public ActionResult GetSchedules(int stage, int day, int startTime, int endTime)
-        {
-            // TODO Get and return all schedules based on the query paramaters.
-            return Ok(new
-            {
-                id = 1,
-                day = day,
-                stage = stage,
-                startTime = startTime,
-                endTime = endTime,
-            });
-        }
+		[HttpGet]
+		public ActionResult GetSchedules(int stage, int day, int startTime, int endTime) {
+			// TODO Get and return all schedules based on the query paramaters.
+			return Ok(new {
+				id = 1,
+				day = day,
+				stage = stage,
+				startTime = startTime,
+				endTime = endTime,
+			});
+		}
 
         [HttpGet("id")]
         public async Task<ActionResult<Schedule>> GetSchedule(int id)
