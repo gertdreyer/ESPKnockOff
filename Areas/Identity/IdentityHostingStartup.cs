@@ -14,7 +14,7 @@ namespace ESPKnockOff.Areas.Identity {
 			builder.ConfigureServices((context, services) => {
 				services.AddDbContext<ApplicationContext>(options =>
 					options.UseSqlServer(
-						Environment.GetEnvironmentVariable("SQLAZURECONNSTR_ESP")));
+						context.Configuration.GetConnectionString("SQLAZURECONNSTR_ESP")));
 
 				services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
 					.AddEntityFrameworkStores<ApplicationContext>();

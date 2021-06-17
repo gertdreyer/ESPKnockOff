@@ -1,14 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ESPKnockOff.Models;
 using ESPKnockOff.Services;
 using System.Net.Http;
 using ESPKnockOff.Models.Enums;
-using ESPKnockOff.Data;
-using Microsoft.AspNetCore.Authorization;
 using ESPKnockOff.Services.Getters;
 
 namespace ESPKnockOff.Controllers
