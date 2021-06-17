@@ -90,7 +90,7 @@ namespace ESPKnockOff.Services.Getters
 
         public override async Task<List<Y>> GetObjectSubObjects<T, Y>(int id, FilteringCoditions filteringConditions, ApplicationContext context)
         {
-            if (typeof(T) == typeof(Province) && typeof(T) == typeof(Municipality))
+            if (typeof(T) == typeof(Province) && typeof(Y) == typeof(Municipality))
             {
                 // TODO
                 return null;
