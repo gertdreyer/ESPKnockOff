@@ -10,6 +10,7 @@ using ESPKnockOff.Services;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using ESPKnockOff.Data;
+using System.Configuration;
 
 namespace ESPKnockOff
 {
@@ -25,7 +26,7 @@ namespace ESPKnockOff
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson();
+			services.AddControllers().AddNewtonsoftJson();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -36,8 +37,8 @@ namespace ESPKnockOff
 			services.AddAuthentication()
 				.AddGoogle(options => {
 					IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
-					options.ClientId = googleAuthNSection["ClientId"];
-					options.ClientSecret = googleAuthNSection["ClientSecret"];
+					options.ClientId = Configuration.GetSection("CLIENTID").ToString();
+					options.ClientSecret = Configuration.GetSection("CLIENTSECRET").ToString();
 				});
 			services.AddMvc().AddRazorPagesOptions(options => {
 				options.Conventions.AddPageRoute("/", "");
