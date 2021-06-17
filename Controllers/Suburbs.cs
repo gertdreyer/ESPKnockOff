@@ -44,7 +44,19 @@ namespace ESPKnockOff.Controllers
         [HttpGet("{id}/schedules")]
         public async Task<ActionResult<List<Schedule>>> GetSuburbSchedules(int id, int stage, int day, string startTime, string endTime)
         {
-            return await _dbService.GetObjectSubObjects<Suburb, Schedule>(id, new FilteringCoditions() { Day = day, Stage = stage, StartTime = startTime, Endtime = endTime });
+            try
+            {
+                return await _dbService.GetObjectSubObjects<Suburb, Schedule>(id, new FilteringCoditions() {
+                    Day = day,
+                    Stage = stage,
+                    StartTime = startTime,
+                    Endtime = endTime
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
         }
 
         [Authorize]

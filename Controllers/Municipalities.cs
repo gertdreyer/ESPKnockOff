@@ -43,7 +43,14 @@ namespace ESPKnockOff.Controllers
         [HttpGet("{id}/suburbs")]
         public async Task<ActionResult<List<Suburb>>> GetMunicipalitySuburbs(int id)
         {
-            return await _dbService.GetObjectSubObjects<Municipality, Suburb>(id);
+            try
+            {
+                return await _dbService.GetObjectSubObjects<Municipality, Suburb>(id);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
         }
 
         [Authorize]
