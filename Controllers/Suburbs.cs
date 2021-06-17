@@ -76,20 +76,5 @@ namespace ESPKnockOff.Controllers
                 return BadRequest(e.ToString());
             }
         }
-
-        [Authorize]
-        [HttpDelete]
-        public async Task<ActionResult> RemoveSuburb(Suburb suburb)
-        {
-            try
-            {
-                _dbService.Remove(suburb);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.ToString());
-            }
-        }
     }
 }

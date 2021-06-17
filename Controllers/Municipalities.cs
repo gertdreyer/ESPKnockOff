@@ -74,19 +74,5 @@ namespace ESPKnockOff.Controllers
                 return BadRequest(e.ToString());
             }
         }
-
-        [HttpDelete]
-        public async Task<ActionResult> RemoveMunicipality(Municipality municipality)
-        {
-            try
-            {
-                _dbService.Remove(municipality);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.ToString());
-            }
-        }
     }
 }

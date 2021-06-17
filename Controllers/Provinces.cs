@@ -74,20 +74,5 @@ namespace ESPKnockOff.Controllers
                 return BadRequest(e.ToString());
             }
         }
-
-        [Authorize]
-        [HttpDelete]
-        public async Task<ActionResult> RemoveProvince(Province province)
-        {
-            try
-            {
-                _dbService.Remove(province);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.ToString());
-            }
-        }
     }
 }
