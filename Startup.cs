@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ESPKnockOff.Models;
 using ESPKnockOff.Services;
+using Newtonsoft.Json;
 
 namespace ESPKnockOff
 {
@@ -22,7 +23,7 @@ namespace ESPKnockOff
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>

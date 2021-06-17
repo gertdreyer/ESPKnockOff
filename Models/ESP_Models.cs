@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -99,9 +100,13 @@ namespace ESPKnockOff.Models
 
         public int StageID { get; set; }
 
-        public string StartTime { get; set; }
+        [JsonConverter(typeof(TimespanConverter))]
+        [JsonProperty(TypeNameHandling = TypeNameHandling.All)]
+        public TimeSpan StartTime { get; set; }
 
-        public string EndTime { get; set; }
+        [JsonConverter(typeof(TimespanConverter))]
+        [JsonProperty(TypeNameHandling = TypeNameHandling.All)]
+        public TimeSpan EndTime { get; set; }
 
         public int TimeCodeID { get; set; }
 
@@ -120,5 +125,23 @@ namespace ESPKnockOff.Models
         [DataMember]
         [Display(Name = "End Time")]
         public TimeSpan EndTime { get; set; }
+    }
+
+    public class TimespanConverter : JsonConverter<TimeSpan>
+    {
+        public const string TimeSpanFormatString = @"hh\:mm";
+
+        public override void WriteJson(JsonWriter writer, TimeSpan value, JsonSerializer serializer)
+        {
+            var timespanFormatted = $"{value.ToString(TimeSpanFormatString)}";
+            writer.WriteValue(timespanFormatted);
+        }
+
+        public override TimeSpan ReadJson(JsonReader reader, Type objectType, TimeSpan existingValue, bool hasExistingValue, JsonSerializer serializer)
+        {
+            TimeSpan parsedTimeSpan;
+            TimeSpan.TryParseExact((string)reader.Value, TimeSpanFormatString, null, out parsedTimeSpan);
+            return parsedTimeSpan;
+        }
     }
 }

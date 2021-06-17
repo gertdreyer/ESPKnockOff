@@ -8,10 +8,10 @@ namespace ESPKnockOff.Services.Getters
 {
     public class FilteringCoditions
     {
-        public int Day { get; set; }
-        public string StartTime { get; set; }
-        public string Endtime { get; set; }
-        public int Stage { get; set; }
+        public int Day { get; set; } = 0;
+        public string StartTime { get; set; } = null;
+        public string Endtime { get; set; } = null;
+        public int Stage { get; set; } = 0;
     }
 
     public abstract class Getter
@@ -188,14 +188,36 @@ namespace ESPKnockOff.Services.Getters
                             ScheduleID = slot.LoadSheddingSlotID,
                             DayOfMonthID = slot.DayOfMonthID,
                             StageID = slot.StageID,
-                            StartTime = timecode.StartTime.ToString(@"hh\:mm"),
-                            EndTime = timecode.EndTime.ToString(@"hh\:mm"),
+                            StartTime = timecode.StartTime,
+                            EndTime = timecode.EndTime,
                             TimeCodeID = timecode.TimeCodeID
                         }
-                    ).ToList();
-                //.Where(c=> TimeSpan.Parse(c.StartTime) >= TimeSpan.Parse(filteringConditions.StartTime) && TimeSpan.Parse(c.EndTime) >= TimeSpan.Parse(filteringConditions.Endtime) && c.DayOfMonthID == filteringConditions.Day && c.StageID == filteringConditions.Stage).ToList();
-             
-                return (List<Y>)Convert.ChangeType(schedules, typeof(List<Y>));
+                    );
+
+                if (filteringConditions != null)
+                {
+                    if (filteringConditions.StartTime != null)
+                    {
+                        schedules = schedules.Where(c => c.StartTime >= TimeSpan.Parse(filteringConditions.StartTime));
+                    }
+
+                    if (filteringConditions.Endtime != null)
+                    {
+                        schedules = schedules.Where(c => c.EndTime <= TimeSpan.Parse(filteringConditions.Endtime));
+                    }
+
+                    if (filteringConditions.Day != 0)
+                    {
+                        schedules = schedules.Where(c => c.DayOfMonthID == filteringConditions.Day);
+                    }
+
+                    if (filteringConditions.Stage != 0)
+                    {
+                        schedules = schedules.Where(c => c.StageID == filteringConditions.Stage);
+                    }
+                }
+
+                return (List<Y>)Convert.ChangeType(schedules.ToList(), typeof(List<Y>));
             }
             else
             {
