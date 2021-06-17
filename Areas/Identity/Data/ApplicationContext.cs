@@ -10,7 +10,7 @@ using ESPKnockOff.Models;
 namespace ESPKnockOff.Data {
 	public class ApplicationContext : IdentityDbContext<IdentityUser> {
 		public DbSet<TimeCode> TimeCode { get; set; }
-		public DbSet<Schedule> LoadSheddingSlot { get; set; }
+		public DbSet<LoadSheddingSlot> LoadSheddingSlot { get; set; }
 		public DbSet<SuburbCluster> SuburbCluster { get; set; }
 		public DbSet<Suburb> Suburb { get; set; }
 		public DbSet<Municipality> Municipality { get; set; }
