@@ -6,204 +6,190 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ESPKnockOff.Models;
+using ESPKnockOff.Data;
 
-namespace ESPKnockOff.Migrations
-{
-    [DbContext(typeof(ApplicationContext))]
-    [Migration("20210608212802_Initial_1")]
-    partial class Initial_1
-    {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
+namespace ESPKnockOff.Migrations {
+	[DbContext(typeof(ApplicationContext))]
+	[Migration("20210608212802_Initial_1")]
+	partial class Initial_1 {
+		protected override void BuildTargetModel(ModelBuilder modelBuilder) {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.7")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+			modelBuilder
+				.HasAnnotation("Relational:MaxIdentifierLength", 128)
+				.HasAnnotation("ProductVersion", "5.0.7")
+				.HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ESPKnockOff.Models.LoadSheddingSlot", b =>
-                {
-                    b.Property<int>("LoadSheddingSlotID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+			modelBuilder.Entity("ESPKnockOff.Models.LoadSheddingSlot", b => {
+				b.Property<int>("LoadSheddingSlotID")
+					.ValueGeneratedOnAdd()
+					.HasColumnType("int")
+					.HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DayOfMonthID")
-                        .HasColumnType("int");
+				b.Property<int>("DayOfMonthID")
+					.HasColumnType("int");
 
-                    b.Property<int>("StageID")
-                        .HasColumnType("int");
+				b.Property<int>("StageID")
+					.HasColumnType("int");
 
-                    b.Property<int>("SuburbClusterID")
-                        .HasColumnType("int");
+				b.Property<int>("SuburbClusterID")
+					.HasColumnType("int");
 
-                    b.Property<int>("TimeCodeID")
-                        .HasColumnType("int");
+				b.Property<int>("TimeCodeID")
+					.HasColumnType("int");
 
-                    b.HasKey("LoadSheddingSlotID");
+				b.HasKey("LoadSheddingSlotID");
 
-                    b.HasIndex("SuburbClusterID");
+				b.HasIndex("SuburbClusterID");
 
-                    b.HasIndex("TimeCodeID");
+				b.HasIndex("TimeCodeID");
 
-                    b.ToTable("LoadSheddingSlot");
-                });
+				b.ToTable("LoadSheddingSlot");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.Municipality", b =>
-                {
-                    b.Property<int>("MunicipalityID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+			modelBuilder.Entity("ESPKnockOff.Models.Municipality", b => {
+				b.Property<int>("MunicipalityID")
+					.ValueGeneratedOnAdd()
+					.HasColumnType("int")
+					.HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+				b.Property<string>("Name")
+					.IsRequired()
+					.HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProvinceID")
-                        .HasColumnType("int");
+				b.Property<int>("ProvinceID")
+					.HasColumnType("int");
 
-                    b.HasKey("MunicipalityID");
+				b.HasKey("MunicipalityID");
 
-                    b.HasIndex("ProvinceID");
+				b.HasIndex("ProvinceID");
 
-                    b.ToTable("Municipality");
-                });
+				b.ToTable("Municipality");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.Province", b =>
-                {
-                    b.Property<int>("ProvinceID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+			modelBuilder.Entity("ESPKnockOff.Models.Province", b => {
+				b.Property<int>("ProvinceID")
+					.ValueGeneratedOnAdd()
+					.HasColumnType("int")
+					.HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+				b.Property<string>("Name")
+					.IsRequired()
+					.HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ProvinceID");
+				b.HasKey("ProvinceID");
 
-                    b.ToTable("Province");
-                });
+				b.ToTable("Province");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.Suburb", b =>
-                {
-                    b.Property<int>("SuburbID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+			modelBuilder.Entity("ESPKnockOff.Models.Suburb", b => {
+				b.Property<int>("SuburbID")
+					.ValueGeneratedOnAdd()
+					.HasColumnType("int")
+					.HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("MunicipalityID")
-                        .HasColumnType("int");
+				b.Property<int>("MunicipalityID")
+					.HasColumnType("int");
 
-                    b.Property<int>("SuburbClusterID")
-                        .HasColumnType("int");
+				b.Property<int>("SuburbClusterID")
+					.HasColumnType("int");
 
-                    b.HasKey("SuburbID");
+				b.HasKey("SuburbID");
 
-                    b.HasIndex("MunicipalityID");
+				b.HasIndex("MunicipalityID");
 
-                    b.HasIndex("SuburbClusterID");
+				b.HasIndex("SuburbClusterID");
 
-                    b.ToTable("Suburb");
-                });
+				b.ToTable("Suburb");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.SuburbCluster", b =>
-                {
-                    b.Property<int>("SuburbClusterID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+			modelBuilder.Entity("ESPKnockOff.Models.SuburbCluster", b => {
+				b.Property<int>("SuburbClusterID")
+					.ValueGeneratedOnAdd()
+					.HasColumnType("int")
+					.HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("SuburbClusterID");
+				b.HasKey("SuburbClusterID");
 
-                    b.ToTable("SuburbCluster");
-                });
+				b.ToTable("SuburbCluster");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.TimeCode", b =>
-                {
-                    b.Property<int>("TimeCodeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+			modelBuilder.Entity("ESPKnockOff.Models.TimeCode", b => {
+				b.Property<int>("TimeCodeID")
+					.ValueGeneratedOnAdd()
+					.HasColumnType("int")
+					.HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
+				b.Property<DateTime>("EndTime")
+					.HasColumnType("datetime2");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+				b.Property<DateTime>("StartTime")
+					.HasColumnType("datetime2");
 
-                    b.HasKey("TimeCodeID");
+				b.HasKey("TimeCodeID");
 
-                    b.ToTable("TimeCode");
-                });
+				b.ToTable("TimeCode");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.LoadSheddingSlot", b =>
-                {
-                    b.HasOne("ESPKnockOff.Models.SuburbCluster", "SuburbCluster")
-                        .WithMany("LoadSheddingSlot")
-                        .HasForeignKey("SuburbClusterID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+			modelBuilder.Entity("ESPKnockOff.Models.LoadSheddingSlot", b => {
+				b.HasOne("ESPKnockOff.Models.SuburbCluster", "SuburbCluster")
+					.WithMany("LoadSheddingSlot")
+					.HasForeignKey("SuburbClusterID")
+					.OnDelete(DeleteBehavior.Cascade)
+					.IsRequired();
 
-                    b.HasOne("ESPKnockOff.Models.TimeCode", "TimeCode")
-                        .WithMany()
-                        .HasForeignKey("TimeCodeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+				b.HasOne("ESPKnockOff.Models.TimeCode", "TimeCode")
+					.WithMany()
+					.HasForeignKey("TimeCodeID")
+					.OnDelete(DeleteBehavior.Cascade)
+					.IsRequired();
 
-                    b.Navigation("SuburbCluster");
+				b.Navigation("SuburbCluster");
 
-                    b.Navigation("TimeCode");
-                });
+				b.Navigation("TimeCode");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.Municipality", b =>
-                {
-                    b.HasOne("ESPKnockOff.Models.Province", "Province")
-                        .WithMany("Municipality")
-                        .HasForeignKey("ProvinceID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+			modelBuilder.Entity("ESPKnockOff.Models.Municipality", b => {
+				b.HasOne("ESPKnockOff.Models.Province", "Province")
+					.WithMany("Municipality")
+					.HasForeignKey("ProvinceID")
+					.OnDelete(DeleteBehavior.Cascade)
+					.IsRequired();
 
-                    b.Navigation("Province");
-                });
+				b.Navigation("Province");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.Suburb", b =>
-                {
-                    b.HasOne("ESPKnockOff.Models.Municipality", "Municipality")
-                        .WithMany("Suburb")
-                        .HasForeignKey("MunicipalityID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+			modelBuilder.Entity("ESPKnockOff.Models.Suburb", b => {
+				b.HasOne("ESPKnockOff.Models.Municipality", "Municipality")
+					.WithMany("Suburb")
+					.HasForeignKey("MunicipalityID")
+					.OnDelete(DeleteBehavior.Cascade)
+					.IsRequired();
 
-                    b.HasOne("ESPKnockOff.Models.SuburbCluster", "SuburbCluster")
-                        .WithMany("Suburb")
-                        .HasForeignKey("SuburbClusterID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+				b.HasOne("ESPKnockOff.Models.SuburbCluster", "SuburbCluster")
+					.WithMany("Suburb")
+					.HasForeignKey("SuburbClusterID")
+					.OnDelete(DeleteBehavior.Cascade)
+					.IsRequired();
 
-                    b.Navigation("Municipality");
+				b.Navigation("Municipality");
 
-                    b.Navigation("SuburbCluster");
-                });
+				b.Navigation("SuburbCluster");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.Municipality", b =>
-                {
-                    b.Navigation("Suburb");
-                });
+			modelBuilder.Entity("ESPKnockOff.Models.Municipality", b => {
+				b.Navigation("Suburb");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.Province", b =>
-                {
-                    b.Navigation("Municipality");
-                });
+			modelBuilder.Entity("ESPKnockOff.Models.Province", b => {
+				b.Navigation("Municipality");
+			});
 
-            modelBuilder.Entity("ESPKnockOff.Models.SuburbCluster", b =>
-                {
-                    b.Navigation("LoadSheddingSlot");
+			modelBuilder.Entity("ESPKnockOff.Models.SuburbCluster", b => {
+				b.Navigation("LoadSheddingSlot");
 
-                    b.Navigation("Suburb");
-                });
+				b.Navigation("Suburb");
+			});
 #pragma warning restore 612, 618
-        }
-    }
+		}
+	}
 }
