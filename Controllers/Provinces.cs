@@ -13,12 +13,12 @@ namespace ESPKnockOff.Controllers
     public class Provinces : Controller
     {
         private readonly ApplicationContext _context;
-        private readonly InsertService _insertService;
+        private readonly DatabaseService _dbService;
 
-        public Provinces(ApplicationContext context, InsertService insertService)
+        public Provinces(ApplicationContext context, DatabaseService dbService)
         {
             _context = context;
-            _insertService = insertService;
+            _dbService = dbService;
         }
 
         [HttpGet]
@@ -53,7 +53,35 @@ namespace ESPKnockOff.Controllers
         {
             try
             {
-                _insertService.Insert(province);
+                _dbService.Insert(province);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateProvince(Province province)
+        {
+            try
+            {
+                _dbService.Update(province);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> RemoveProvince(Province province)
+        {
+            try
+            {
+                _dbService.Remove(province);
                 return Ok();
             }
             catch (Exception e)
