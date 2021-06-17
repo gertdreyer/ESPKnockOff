@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using ESPKnockOff.Data;
 using System.Configuration;
+using System;
 
 namespace ESPKnockOff
 {
@@ -36,8 +37,8 @@ namespace ESPKnockOff
 
 			services.AddAuthentication()
 				.AddGoogle(options => {
-					options.ClientId = Configuration["APPSETTINGS_CLIENTID"];
-					options.ClientSecret = Configuration["APPSETTINGS_CLIENTSECRET"];
+					options.ClientId = Environment.GetEnvironmentVariable("APPSETTINGS_CLIENTID");
+					options.ClientSecret = Environment.GetEnvironmentVariable("APPSETTINGS_CLIENTSECRET");
 				});
 			services.AddMvc().AddRazorPagesOptions(options => {
 				options.Conventions.AddPageRoute("/", "");
