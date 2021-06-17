@@ -26,7 +26,6 @@ namespace ESPKnockOff
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			services.AddTransient<IConfiguration>();
 			services.AddControllers().AddNewtonsoftJson();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
@@ -37,8 +36,8 @@ namespace ESPKnockOff
 
 			services.AddAuthentication()
 				.AddGoogle(options => {
-					options.ClientId = Configuration.GetSection("APPSETTINGS_CLIENTID").Value;
-					options.ClientSecret = Configuration.GetSection("APPSETTINGS_CLIENTSECRET").Value;
+					options.ClientId = Configuration["APPSETTINGS_CLIENTID"];
+					options.ClientSecret = Configuration["APPSETTINGS_CLIENTSECRET"];
 				});
 			services.AddMvc().AddRazorPagesOptions(options => {
 				options.Conventions.AddPageRoute("/", "");
