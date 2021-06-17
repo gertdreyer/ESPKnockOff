@@ -36,8 +36,8 @@ namespace ESPKnockOff
 
 			services.AddAuthentication()
 				.AddGoogle(options => {
-					options.ClientId = Configuration.GetSection("CLIENTID").Value;
-					options.ClientSecret = Configuration.GetSection("CLIENTSECRET").Value;
+					options.ClientId = Configuration.GetSection("APPSETTINGS_CLIENTID").Value;
+					options.ClientSecret = Configuration.GetSection("APPSETTINGS_CLIENTSECRET").Value;
 				});
 			services.AddMvc().AddRazorPagesOptions(options => {
 				options.Conventions.AddPageRoute("/", "");
