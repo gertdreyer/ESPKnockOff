@@ -13,12 +13,12 @@ namespace ESPKnockOff.Controllers
     public class Suburbs : Controller
     {
         private readonly ApplicationContext _context;
-        private readonly InsertService _insertService;
+        private readonly DatabaseService _dbService;
 
-        public Suburbs(ApplicationContext context, InsertService insertService)
+        public Suburbs(ApplicationContext context, DatabaseService dbService)
         {
             _context = context;
-            _insertService = insertService;
+            _dbService = dbService;
         }
 
         [HttpGet]
@@ -58,7 +58,35 @@ namespace ESPKnockOff.Controllers
         {
             try
             {
-                _insertService.Insert(suburb);
+                _dbService.Insert(suburb);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateSuburb(Suburb suburb)
+        {
+            try
+            {
+                _dbService.Update(suburb);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> RemoveSuburb(Suburb suburb)
+        {
+            try
+            {
+                _dbService.Remove(suburb);
                 return Ok();
             }
             catch (Exception e)

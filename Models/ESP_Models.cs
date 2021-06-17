@@ -83,14 +83,14 @@ namespace ESPKnockOff.Models
         public virtual ICollection<Suburb> Suburb { get; set; }
 
         [IgnoreDataMember]
-        public virtual ICollection<LoadSheddingSlot> LoadSheddingSlot { get; set; }
+        public virtual ICollection<Schedule> LoadSheddingSlot { get; set; }
     }
 
-    public class LoadSheddingSlot
+    public class Schedule
     {
         [DataMember]
         [Key]
-        public int LoadSheddingSlotID { get; set; }
+        public int ScheduleID { get; set; }
 
         [DataMember(IsRequired = true)]
         [Required]

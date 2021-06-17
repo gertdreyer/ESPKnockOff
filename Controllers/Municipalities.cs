@@ -13,12 +13,12 @@ namespace ESPKnockOff.Controllers
     public class Municipalities : Controller
     {
         private readonly ApplicationContext _context;
-        private readonly InsertService _insertService;
+        private readonly DatabaseService _dbService;
 
-        public Municipalities(ApplicationContext context, InsertService insertService)
+        public Municipalities(ApplicationContext context, DatabaseService dbService)
         {
             _context = context;
-            _insertService = insertService;
+            _dbService = dbService;
         }
 
         [HttpGet]
@@ -53,7 +53,35 @@ namespace ESPKnockOff.Controllers
         {
             try
             {
-                _insertService.Insert(municipality);
+                _dbService.Insert(municipality);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateMunicipality(Municipality municipality)
+        {
+            try
+            {
+                _dbService.Update(municipality);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> RemoveMunicipality(Municipality municipality)
+        {
+            try
+            {
+                _dbService.Remove(municipality);
                 return Ok();
             }
             catch (Exception e)
