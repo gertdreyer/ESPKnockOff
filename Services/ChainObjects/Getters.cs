@@ -8,8 +8,8 @@ using ESPKnockOff.Models;
 namespace ESPKnockOff.Services.Getters {
 	public class FilteringCoditions {
 		public int Day { get; set; } = 0;
-		public string StartTime { get; set; } = null;
-		public string Endtime { get; set; } = null;
+		public string FromTime { get; set; } = null;
+		public string ToTime { get; set; } = null;
 		public int Stage { get; set; } = 0;
 	}
 
@@ -149,12 +149,12 @@ namespace ESPKnockOff.Services.Getters {
 					).Where(schedule => schedule.SuburbClusterID == suburb.SuburbClusterID);
 
 				if (filteringConditions != null) {
-					if (filteringConditions.StartTime != null) {
-						schedules = schedules.Where(c => c.StartTime >= TimeSpan.Parse(filteringConditions.StartTime));
+					if (filteringConditions.FromTime != null) {
+						schedules = schedules.Where(c => c.StartTime >= TimeSpan.Parse(filteringConditions.FromTime));
 					}
 
-					if (filteringConditions.Endtime != null) {
-						schedules = schedules.Where(c => c.EndTime <= TimeSpan.Parse(filteringConditions.Endtime));
+					if (filteringConditions.ToTime != null) {
+						schedules = schedules.Where(c => c.EndTime <= TimeSpan.Parse(filteringConditions.ToTime));
 					}
 
 					if (filteringConditions.Day != 0) {
@@ -196,14 +196,14 @@ namespace ESPKnockOff.Services.Getters {
 
 				if (filteringConditions != null)
 				{
-					if (filteringConditions.StartTime != null)
+					if (filteringConditions.FromTime != null)
 					{
-						schedules = schedules.Where(c => c.StartTime >= TimeSpan.Parse(filteringConditions.StartTime));
+						schedules = schedules.Where(c => c.StartTime >= TimeSpan.Parse(filteringConditions.FromTime));
 					}
 
-					if (filteringConditions.Endtime != null)
+					if (filteringConditions.ToTime != null)
 					{
-						schedules = schedules.Where(c => c.EndTime <= TimeSpan.Parse(filteringConditions.Endtime));
+						schedules = schedules.Where(c => c.EndTime <= TimeSpan.Parse(filteringConditions.ToTime));
 					}
 
 					if (filteringConditions.Day != 0)

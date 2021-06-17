@@ -25,7 +25,7 @@ namespace ESPKnockOff.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Schedule>>> GetSchedules(int stage, int day, string startTime, string endTime)
+        public async Task<ActionResult<List<Schedule>>> GetSchedules(int stage, int day, string fromTime, string toTime)
         {
             try
             {
@@ -33,8 +33,8 @@ namespace ESPKnockOff.Controllers
                 {
                     Day = day,
                     Stage = stage,
-                    StartTime = startTime,
-                    Endtime = endTime
+                    FromTime = fromTime,
+                    ToTime = toTime
                 });
             }
             catch (Exception e)
