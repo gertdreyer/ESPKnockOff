@@ -19,10 +19,6 @@ namespace ESPKnockOff.Models
         [Required]
         [Display(Name = "Name")]
         public String Name { get; set; }
-
-
-        [IgnoreDataMember]
-        public virtual ICollection<Municipality> Municipality { get; set; }
     }
 
     public class Municipality
@@ -39,12 +35,7 @@ namespace ESPKnockOff.Models
         [DataMember(IsRequired = true)]
         [Required]
         public int ProvinceID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("ProvinceID")]
-        public virtual Province Province { get; set; }
 
-        [IgnoreDataMember]
-        public virtual ICollection<Suburb> Suburb { get; set; }
     }
 
     public class Suburb
@@ -61,16 +52,10 @@ namespace ESPKnockOff.Models
         [DataMember(IsRequired = true)]
         [Required]
         public int SuburbClusterID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("SuburbClusterID")]
-        public virtual SuburbCluster SuburbCluster { get; set; }
 
         [DataMember(IsRequired = true)]
         [Required]
         public int MunicipalityID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("MunicipalityID")]
-        public virtual Municipality Municipality { get; set; }
     }
 
     public class SuburbCluster
@@ -79,18 +64,13 @@ namespace ESPKnockOff.Models
         [Key]
         public int SuburbClusterID { get; set; }
 
-        [IgnoreDataMember]
-        public virtual ICollection<Suburb> Suburb { get; set; }
-
-        [IgnoreDataMember]
-        public virtual ICollection<Schedule> LoadSheddingSlot { get; set; }
     }
 
-    public class Schedule
+    public class LoadSheddingSlot
     {
         [DataMember]
         [Key]
-        public int ScheduleID { get; set; }
+        public int LoadSheddingSlotID { get; set; }
 
         [DataMember(IsRequired = true)]
         [Required]
@@ -105,16 +85,26 @@ namespace ESPKnockOff.Models
         [DataMember(IsRequired = true)]
         [Required]
         public int TimeCodeID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("TimeCodeID")]
-        public virtual TimeCode TimeCode { get; set; }
 
         [DataMember(IsRequired = true)]
         [Required]
         public int SuburbClusterID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("SuburbClusterID")]
-        public virtual SuburbCluster SuburbCluster { get; set; }
+    }
+
+    public class Schedule
+    {
+        public int ScheduleID { get; set; }
+
+        public int DayOfMonthID { get; set; }
+
+        public int StageID { get; set; }
+
+        public string StartTime { get; set; }
+
+        public string EndTime { get; set; }
+
+        public int TimeCodeID { get; set; }
+
     }
 
     public class TimeCode

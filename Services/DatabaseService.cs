@@ -21,6 +21,7 @@ namespace ESPKnockOff.Services
             _updaterChain.SetNextUpdater(new MunicipalityUpdater()).SetNextUpdater(new SuburbUpdater());
 
             _getterChain = new ProvinceGetter();
+            _getterChain.SetNextGetter(new MunicipalityGetter()).SetNextGetter(new SuburbGetter());
         }
 
         public void Insert(object obj)

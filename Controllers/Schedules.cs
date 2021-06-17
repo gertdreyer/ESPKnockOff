@@ -40,7 +40,7 @@ namespace ESPKnockOff.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<Schedule>> GetSchedule(int id)
         {
-            Schedule schedule = await _context.LoadSheddingSlot.FindAsync(id);
+            Schedule schedule = await _dbService.GetObjectById<Schedule>(id);
 
             if (schedule == null)
             {

@@ -139,13 +139,13 @@ namespace ESPKnockOff.Services.Updaters
                 switch (type)
                 {
                     case UpdateType.Insert:
-                        context.LoadSheddingSlot.Add((Schedule)obj);
+                        context.LoadSheddingSlot.Add((LoadSheddingSlot)obj);
                         break;
                     case UpdateType.Update:
-                        context.LoadSheddingSlot.Update((Schedule)obj);
+                        context.LoadSheddingSlot.Update((LoadSheddingSlot)obj);
                         break;
                     case UpdateType.Remove:
-                        context.LoadSheddingSlot.Remove((Schedule)obj);
+                        context.LoadSheddingSlot.Remove((LoadSheddingSlot)obj);
                         break;
                 }
             }
