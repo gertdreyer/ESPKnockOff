@@ -16,7 +16,7 @@ namespace ESPKnockOff.Controllers
     {
         private readonly DatabaseService _dbService;
 
-        public Suburbs(ApplicationContext context, DatabaseService dbService)
+        public Suburbs(DatabaseService dbService)
         {
             _dbService = dbService;
         }
