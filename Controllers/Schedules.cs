@@ -27,13 +27,29 @@ namespace ESPKnockOff.Controllers
         {
             try
             {
-                return await _dbService.GetObjects<Schedule>(new FilteringCoditions()
+                var schedules = await _dbService.GetObjects<Schedule>(new FilteringCoditions()
                 {
                     Day = day,
                     Stage = stage,
                     FromTime = fromTime,
                     ToTime = toTime
                 });
+
+                int ETag = 0;
+                foreach (var schedule in schedules)
+                {
+                    ETag += schedule.GetHashCode();
+                }
+
+                if (Request.Headers["ETag"] != ETag.ToString())
+                {
+                    Response.Headers.Add("ETag", ETag.ToString());
+                    return schedules;
+                }
+                else
+                {
+                    return StatusCode(304);
+                }
             }
             catch (Exception e)
             {
@@ -45,13 +61,21 @@ namespace ESPKnockOff.Controllers
         public async Task<ActionResult<Schedule>> GetSchedule(int id)
         {
             Schedule schedule = await _dbService.GetObjectById<Schedule>(id);
+            var scheduleETag = schedule.GetHashCode().ToString();
 
             if (schedule == null)
             {
                 return NotFound();
             }
-
-            return schedule;
+            else if (Request.Headers["ETag"] != scheduleETag)
+            {
+                Response.Headers.Add("ETag", scheduleETag);
+                return schedule;
+            }
+            else
+            {
+                return StatusCode(304);
+            }
         }
 
         [Authorize]
@@ -76,7 +100,16 @@ namespace ESPKnockOff.Controllers
             try
             {
                 var result = _dbService.Update(schedule);
-                return Ok(result);
+
+                if (Request.Headers["ETag"] != result.GetHashCode().ToString())
+                {
+                    Response.Headers.Add("ETag", result.GetHashCode().ToString());
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode(304);
+                }
             }
             catch (Exception e)
             {

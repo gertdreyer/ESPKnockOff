@@ -39,7 +39,7 @@ namespace ESPKnockOff
 				options.Conventions.AddPageRoute("/", "");
 			});
 
-			services.AddSingleton<DatabaseService>();
+			services.AddTransient<DatabaseService>();
 
         }
 

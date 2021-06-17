@@ -21,9 +21,25 @@ namespace ESPKnockOff.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Municipality>> GetMunicipalities()
+        public async Task<ActionResult<List<Municipality>>> GetMunicipalities()
         {
-            return await _dbService.GetObjects<Municipality>();
+            var municipalities = await _dbService.GetObjects<Municipality>();
+
+            int ETag = 0;
+            foreach (var municipality in municipalities)
+            {
+                ETag += municipality.GetHashCode();
+            }
+
+            if (Request.Headers["ETag"] != ETag.ToString())
+            {
+                Response.Headers.Add("ETag", ETag.ToString());
+                return municipalities;
+            }
+            else
+            {
+                return StatusCode(304);
+            }
         }
 
         [HttpGet("{id}")]
@@ -35,8 +51,15 @@ namespace ESPKnockOff.Controllers
             {
                 return NotFound();
             }
-
-            return municipality;
+            else if (Request.Headers["ETag"] != municipality.GetHashCode().ToString())
+            {
+                Response.Headers.Add("ETag", municipality.GetHashCode().ToString());
+                return Ok(municipality);
+            }
+            else
+            {
+                return StatusCode(304);
+            }
         }
 
         [HttpGet("{id}/suburbs")]
@@ -44,7 +67,23 @@ namespace ESPKnockOff.Controllers
         {
             try
             {
-                return await _dbService.GetObjectSubObjects<Municipality, Suburb>(id);
+                var suburbs = await _dbService.GetObjectSubObjects<Municipality, Suburb>(id);
+
+                int etag = 0;
+                foreach (var suburb in suburbs)
+                {
+                    etag += suburb.GetHashCode();
+                }
+
+                if (Request.Headers["ETag"] != etag.ToString())
+                {
+                    Response.Headers.Add("ETag", etag.ToString());
+                    return suburbs;
+                }
+                else
+                {
+                    return StatusCode(304);
+                }
             }
             catch (Exception e)
             {
@@ -73,7 +112,17 @@ namespace ESPKnockOff.Controllers
             try
             {
                 var result = _dbService.Update(municipality);
-                return Ok(result);
+                var resultETag = result.GetHashCode().ToString();
+
+                if (Request.Headers["ETag"] != resultETag)
+                {
+                    Response.Headers.Add("ETag", resultETag);
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode(304);
+                }
             }
             catch (Exception e)
             {

@@ -22,9 +22,25 @@ namespace ESPKnockOff.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Suburb>> GetSuburbs()
+        public async Task<ActionResult<List<Suburb>>> GetSuburbs()
         {
-            return await _dbService.GetObjects<Suburb>();
+            var suburbs = await _dbService.GetObjects<Suburb>();
+
+            int ETag = 0;
+            foreach (var suburb in suburbs)
+            {
+                ETag += suburb.GetHashCode();
+            }
+
+            if (Request.Headers["ETag"] != ETag.ToString())
+            {
+                Response.Headers.Add("ETag", ETag.ToString());
+                return suburbs;
+            }
+            else
+            {
+                return StatusCode(304);
+            }
         }
 
         [HttpGet("{id}")]
@@ -36,8 +52,15 @@ namespace ESPKnockOff.Controllers
             {
                 return NotFound();
             }
-
-            return suburb;
+            else if (Request.Headers["ETag"] != suburb.GetHashCode().ToString())
+            {
+                Response.Headers.Add("ETag", suburb.GetHashCode().ToString());
+                return suburb;
+            }
+            else
+            {
+                return StatusCode(304);
+            }
         }
 
         [HttpGet("{id}/schedules")]
@@ -45,12 +68,28 @@ namespace ESPKnockOff.Controllers
         {
             try
             {
-                return await _dbService.GetObjectSubObjects<Suburb, Schedule>(id, new FilteringCoditions() {
+                var schedules = await _dbService.GetObjectSubObjects<Suburb, Schedule>(id, new FilteringCoditions() {
                     Day = day,
                     Stage = stage,
                     FromTime = fromTime,
                     ToTime = toTime
                 });
+
+                int ETag = 0;
+                foreach (var schedule in schedules)
+                {
+                    ETag += schedule.GetHashCode();
+                }
+
+                if (Request.Headers["ETag"] != ETag.ToString())
+                {
+                    Response.Headers.Add("ETag", ETag.ToString());
+                    return schedules;
+                }
+                else
+                {
+                    return StatusCode(304);
+                }
             }
             catch (Exception e)
             {
@@ -80,7 +119,17 @@ namespace ESPKnockOff.Controllers
             try
             {
                 var result = _dbService.Update(suburb);
-                return Ok(result);
+                var resultETag = result.GetHashCode().ToString();
+
+                if (Request.Headers["ETag"] != resultETag)
+                {
+                    Response.Headers.Add("ETag", resultETag);
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode(304);
+                }
             }
             catch (Exception e)
             {

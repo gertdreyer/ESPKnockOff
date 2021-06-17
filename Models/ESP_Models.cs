@@ -5,7 +5,6 @@ using System.Runtime.Serialization;
 
 namespace ESPKnockOff.Models
 {
-
     public class Province
     {
         [DataMember]
@@ -16,6 +15,17 @@ namespace ESPKnockOff.Models
         [Required]
         [Display(Name = "Name")]
         public String Name { get; set; }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + ProvinceID.GetHashCode();
+                hash = hash * 23 + Name.GetHashCode();
+                return hash;
+            }
+        }
     }
 
     public class Municipality
@@ -33,6 +43,17 @@ namespace ESPKnockOff.Models
         [Required]
         public int ProvinceID { get; set; }
 
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + MunicipalityID.GetHashCode();
+                hash = hash * 23 + Name.GetHashCode();
+                hash = hash * 23 + ProvinceID.GetHashCode();
+                return hash;
+            }
+        }
     }
 
     public class Suburb
@@ -53,6 +74,19 @@ namespace ESPKnockOff.Models
         [DataMember(IsRequired = true)]
         [Required]
         public int MunicipalityID { get; set; }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + SuburbID.GetHashCode();
+                hash = hash * 23 + Name.GetHashCode();
+                hash = hash * 23 + SuburbClusterID.GetHashCode();
+                hash = hash * 23 + MunicipalityID.GetHashCode();
+                return hash;
+            }
+        }
     }
 
     public class SuburbCluster
@@ -105,6 +139,21 @@ namespace ESPKnockOff.Models
         public TimeSpan EndTime { get; set; }
 
         public int SuburbClusterID { get; set; }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + ScheduleID.GetHashCode();
+                hash = hash * 23 + Day.GetHashCode();
+                hash = hash * 23 + Stage.GetHashCode();
+                hash = hash * 23 + StartTime.GetHashCode();
+                hash = hash * 23 + EndTime.GetHashCode();
+                hash = hash * 23 + SuburbClusterID.GetHashCode();
+                return hash;
+            }
+        }
     }
 
     public class TimeCode

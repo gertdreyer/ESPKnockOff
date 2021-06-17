@@ -26,21 +26,18 @@ namespace ESPKnockOff.Services
         public object Insert(object obj)
         {
             var result = _updaterChain.HandleUpdate(obj, _context, UpdateType.Insert);
-            _context.ChangeTracker.Clear();
             return result;
         }
 
         public object Update(object obj)
         {
             var result = _updaterChain.HandleUpdate(obj, _context, UpdateType.Update);
-            _context.ChangeTracker.Clear();
             return result;
         }
 
         public void Remove(object obj)
         {
             _updaterChain.HandleUpdate(obj, _context, UpdateType.Remove);
-            _context.ChangeTracker.Clear();
         }
 
         public Task<List<T>> GetObjects<T>(FilteringCoditions filteringConditions = null)

@@ -20,22 +20,47 @@ namespace ESPKnockOff.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Province>> GetProvinces()
+        public async Task<ActionResult<List<Province>>> GetProvinces()
         {
-            return await _dbService.GetObjects<Province>();
+            var provinces = await _dbService.GetObjects<Province>();
+
+            int ETag = 0;
+            foreach (var province in provinces)
+            {
+                ETag += province.GetHashCode();
+            }
+
+            if (Request.Headers["ETag"] != ETag.ToString())
+            {
+                Response.Headers.Add("ETag", ETag.ToString());
+                return provinces;
+            }
+            else
+            {
+                return StatusCode(304);
+            }
+
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Province>> GetProvince(int id)
         {
             var province = await _dbService.GetObjectById<Province>(id);
+            var provinceETag = province.GetHashCode().ToString();
 
             if (province == null)
             {
                 return NotFound();
             }
-
-            return province;
+            else if (Request.Headers["ETag"] != provinceETag)
+            {
+                Response.Headers.Add("ETag", provinceETag);
+                return province;
+            }
+            else
+            {
+                return StatusCode(304);
+            }
         }
 
         [HttpGet("{id}/municipalities")]
@@ -43,7 +68,23 @@ namespace ESPKnockOff.Controllers
         {
             try
             {
-                return await _dbService.GetObjectSubObjects<Province, Municipality>(id);
+                var municipalities = await _dbService.GetObjectSubObjects<Province, Municipality>(id);
+
+                int etag = 0;
+                foreach (var municipality in municipalities)
+                {
+                    etag += municipality.GetHashCode();
+                }
+
+                if (Request.Headers["ETag"] != etag.ToString())
+                {
+                    Response.Headers.Add("ETag", etag.ToString());
+                    return municipalities;
+                }
+                else
+                {
+                    return StatusCode(304);
+                }
             }
             catch (Exception e)
             {
@@ -74,7 +115,17 @@ namespace ESPKnockOff.Controllers
             try
             {
                 var result = _dbService.Update(province);
-                return Ok(result);
+                var resultETag = result.GetHashCode().ToString();
+
+                if (Request.Headers["ETag"] != resultETag)
+                {
+                    Response.Headers.Add("ETag", resultETag);
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode(304);
+                }
             }
             catch (Exception e)
             {
