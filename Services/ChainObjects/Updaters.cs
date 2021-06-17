@@ -28,12 +28,12 @@ namespace ESPKnockOff.Services.Updaters
             return inserter;
         }
 
-        public void NextUpdaterHandle(object obj, ApplicationContext context, UpdateType type)
+        public object NextUpdaterHandle(object obj, ApplicationContext context, UpdateType type)
         {
-            _nextUpdater.HandleUpdate(obj, context, type);
+            return _nextUpdater.HandleUpdate(obj, context, type);
         }
 
-        public abstract void HandleUpdate(object obj, ApplicationContext context, UpdateType type);
+        public abstract object HandleUpdate(object obj, ApplicationContext context, UpdateType type);
     }
 
     public class NullUpdater : Updater
@@ -47,7 +47,7 @@ namespace ESPKnockOff.Services.Updaters
             get { return _instance; }
         }
 
-        public override void HandleUpdate(object obj, ApplicationContext context, UpdateType type)
+        public override object HandleUpdate(object obj, ApplicationContext context, UpdateType type)
         {
             throw new Exception($"No updater able to handle object of type {obj.GetType()}");
         }
@@ -55,7 +55,7 @@ namespace ESPKnockOff.Services.Updaters
 
     public class ProvinceUpdater : Updater
     {
-        public override void HandleUpdate(object obj, ApplicationContext context, UpdateType type)
+        public override object HandleUpdate(object obj, ApplicationContext context, UpdateType type)
         {
             if (obj is Province)
             {
@@ -69,19 +69,22 @@ namespace ESPKnockOff.Services.Updaters
                         break;
                     case UpdateType.Remove:
                         context.Province.Remove((Province)obj);
-                        break;
+                        return null;
                 }
+
+                context.SaveChanges();
+                return obj;
             }
             else
             {
-                NextUpdaterHandle(obj, context, type);
+                return NextUpdaterHandle(obj, context, type);
             }
         }
     }
 
     public class MunicipalityUpdater : Updater
     {
-        public override void HandleUpdate(object obj, ApplicationContext context, UpdateType type)
+        public override object HandleUpdate(object obj, ApplicationContext context, UpdateType type)
         {
             if (obj is Municipality)
             {
@@ -97,17 +100,20 @@ namespace ESPKnockOff.Services.Updaters
                         context.Municipality.Remove((Municipality)obj);
                         break;
                 }
+
+                context.SaveChanges();
+                return obj;
             }
             else
             {
-                NextUpdaterHandle(obj, context, type);
+                return NextUpdaterHandle(obj, context, type);
             }
         }
     }
 
     public class SuburbUpdater : Updater
     {
-        public override void HandleUpdate(object obj, ApplicationContext context, UpdateType type)
+        public override object HandleUpdate(object obj, ApplicationContext context, UpdateType type)
         {
             if (obj is Suburb)
             {
@@ -123,36 +129,81 @@ namespace ESPKnockOff.Services.Updaters
                         context.Suburb.Remove((Suburb)obj);
                         break;
                 }
+
+                context.SaveChanges();
+                return obj;
             }
             else
             {
-                NextUpdaterHandle(obj, context, type);
+                return NextUpdaterHandle(obj, context, type);
             }
         }
     }
 
     public class ScheduleUpdater : Updater
     {
-        public override void HandleUpdate(object obj, ApplicationContext context, UpdateType type)
+        public override object HandleUpdate(object obj, ApplicationContext context, UpdateType type)
         {
-            if (obj is Suburb)
+            if (obj is Schedule)
             {
+                var schedule = (Schedule)obj;
+                var timeCodes = context.TimeCode.Where(timeCode => timeCode.StartTime == schedule.StartTime && timeCode.EndTime == schedule.EndTime).ToList();
+                var timeCodeID = 0;
+
+                if (timeCodes.Count > 0)
+                {
+                    timeCodeID = timeCodes[0].TimeCodeID;
+                }
+                else
+                {
+                    var timeCode = new TimeCode()
+                    {
+                        StartTime = schedule.StartTime,
+                        EndTime = schedule.EndTime
+                    };
+                    context.TimeCode.Add(timeCode);
+                    context.SaveChanges();
+                    timeCodeID = timeCode.TimeCodeID;
+                }
+
+                var loadSheddingSlot = new LoadSheddingSlot()
+                {
+                    DayOfMonthID = schedule.DayOfMonthID,
+                    StageID = schedule.StageID,
+                    SuburbClusterID = schedule.SuburbClusterID,
+                    TimeCodeID = timeCodeID,
+                };
+
+                if (type != UpdateType.Insert)
+                {
+                    loadSheddingSlot.LoadSheddingSlotID = schedule.ScheduleID;
+                }
+
                 switch (type)
                 {
                     case UpdateType.Insert:
-                        context.LoadSheddingSlot.Add((LoadSheddingSlot)obj);
+                        context.LoadSheddingSlot.Add(loadSheddingSlot);
                         break;
                     case UpdateType.Update:
-                        context.LoadSheddingSlot.Update((LoadSheddingSlot)obj);
+                        context.LoadSheddingSlot.Update(loadSheddingSlot);
                         break;
                     case UpdateType.Remove:
-                        context.LoadSheddingSlot.Remove((LoadSheddingSlot)obj);
+                        context.LoadSheddingSlot.Remove(loadSheddingSlot);
                         break;
                 }
+
+                context.SaveChanges();
+
+                if (type == UpdateType.Insert)
+                {
+                    schedule.ScheduleID = loadSheddingSlot.LoadSheddingSlotID;
+                }
+
+                return schedule;
             }
             else
             {
-                NextUpdaterHandle(obj, context, type);
+                return NextUpdaterHandle(obj, context, type);
             }
         }
     }

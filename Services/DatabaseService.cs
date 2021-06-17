@@ -18,29 +18,29 @@ namespace ESPKnockOff.Services
         public DatabaseService(ApplicationContext context)
         {
             _context = context;
+
             _updaterChain = new ProvinceUpdater();
-            _updaterChain.SetNextUpdater(new MunicipalityUpdater()).SetNextUpdater(new SuburbUpdater());
+            _updaterChain.SetNextUpdater(new MunicipalityUpdater()).SetNextUpdater(new SuburbUpdater()).SetNextUpdater(new ScheduleUpdater());
 
             _getterChain = new ProvinceGetter();
-            _getterChain.SetNextGetter(new MunicipalityGetter()).SetNextGetter(new SuburbGetter());
+            _getterChain.SetNextGetter(new MunicipalityGetter()).SetNextGetter(new SuburbGetter()).SetNextGetter(new ScheduleGetter());
         }
 
-        public void Insert(object obj)
+        public object Insert(object obj)
         {
-            _updaterChain.HandleUpdate(obj, _context, UpdateType.Insert);
-            _context.SaveChanges();  
+            var result = _updaterChain.HandleUpdate(obj, _context, UpdateType.Insert);
+            return result;
         }
 
-        public void Update(object obj)
+        public object Update(object obj)
         {
-            _updaterChain.HandleUpdate(obj, _context, UpdateType.Update);
-            _context.SaveChanges();
+            var result = _updaterChain.HandleUpdate(obj, _context, UpdateType.Update);
+            return result;
         }
 
         public void Remove(object obj)
         {
             _updaterChain.HandleUpdate(obj, _context, UpdateType.Remove);
-            _context.SaveChanges();
         }
 
         public Task<List<T>> GetObjects<T>(FilteringCoditions filteringConditions = null)

@@ -11,7 +11,6 @@ namespace ESPKnockOff.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    	[Authorize]
     public class Provinces : Controller
     {
         private readonly DatabaseService _dbService;
@@ -46,13 +45,14 @@ namespace ESPKnockOff.Controllers
             return await _dbService.GetObjectSubObjects<Province, Municipality>(id);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> AddProvince(Province province)
         {
             try
             {
-                _dbService.Insert(province);
-                return Ok();
+                var result = _dbService.Update(province);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -60,27 +60,14 @@ namespace ESPKnockOff.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult> UpdateProvince(Province province)
         {
             try
             {
-                _dbService.Update(province);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.ToString());
-            }
-        }
-
-        [HttpDelete]
-        public async Task<ActionResult> RemoveProvince(Province province)
-        {
-            try
-            {
-                _dbService.Remove(province);
-                return Ok();
+                var result = _dbService.Update(province);
+                return Ok(result);
             }
             catch (Exception e)
             {

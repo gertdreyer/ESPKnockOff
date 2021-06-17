@@ -9,38 +9,33 @@ using System.Net.Http;
 using ESPKnockOff.Models.Enums;
 using ESPKnockOff.Data;
 using Microsoft.AspNetCore.Authorization;
+using ESPKnockOff.Services.Getters;
 
 namespace ESPKnockOff.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class Schedules : Controller
     {
-        private readonly ApplicationContext _context;
         private readonly DatabaseService _dbService;
 
-        public Schedules(ApplicationContext context, DatabaseService dbService)
+        public Schedules(DatabaseService dbService)
         {
-            _context = context;
             _dbService = dbService;
         }
 
         [HttpGet]
-        public ActionResult GetSchedules(int stage, int day, int startTime, int endTime)
+        public async Task<List<Schedule>> GetSchedules(int stage, int day, string startTime, string endTime)
         {
-            // TODO Get and return all schedules based on the query paramaters.
-            return Ok(new
-            {
-                id = 1,
-                day = day,
-                stage = stage,
-                startTime = startTime,
-                endTime = endTime,
+            return await _dbService.GetObjects<Schedule>(new FilteringCoditions() {
+                Day = day,
+                Stage = stage,
+                StartTime = startTime,
+                Endtime = endTime 
             });
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Schedule>> GetSchedule(int id)
         {
             Schedule schedule = await _dbService.GetObjectById<Schedule>(id);
@@ -53,13 +48,14 @@ namespace ESPKnockOff.Controllers
             return schedule;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> AddSchedule(Schedule schedule)
         {
             try
             {
-                _dbService.Insert(schedule);
-                return Ok();
+                var result = _dbService.Insert(schedule);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -67,13 +63,14 @@ namespace ESPKnockOff.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult> UpdateSchedule(Schedule schedule)
         {
             try
             {
-                _dbService.Update(schedule);
-                return Ok();
+                var result = _dbService.Update(schedule);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -81,6 +78,7 @@ namespace ESPKnockOff.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         public async Task<ActionResult> RemoveSchedule(Schedule schedule)
         {

@@ -131,21 +131,22 @@ namespace ESPKnockOff.Services.Getters {
 
 		public override async Task<List<Y>> GetObjectSubObjects<T, Y>(int id, FilteringCoditions filteringConditions, ApplicationContext context) {
 			if (typeof(T) == typeof(Suburb) && typeof(Y) == typeof(Schedule)) {
-				var suburbClusterId = await context.Suburb.FindAsync(id);
+				var suburb = await context.Suburb.FindAsync(id);
 
 				var schedules = context.LoadSheddingSlot.Join(
 						context.TimeCode,
 						slot => slot.TimeCodeID,
 						timecode => timecode.TimeCodeID,
-						(slot, timecode) => new Schedule {
+						(slot, timecode) => new Schedule
+						{
 							ScheduleID = slot.LoadSheddingSlotID,
 							DayOfMonthID = slot.DayOfMonthID,
 							StageID = slot.StageID,
 							StartTime = timecode.StartTime,
 							EndTime = timecode.EndTime,
-							TimeCodeID = timecode.TimeCodeID
+							SuburbClusterID = slot.SuburbClusterID
 						}
-					);
+					).Where(schedule => schedule.SuburbClusterID == suburb.SuburbClusterID);
 
 				if (filteringConditions != null) {
 					if (filteringConditions.StartTime != null) {
@@ -161,7 +162,7 @@ namespace ESPKnockOff.Services.Getters {
 					}
 
 					if (filteringConditions.Stage != 0) {
-						schedules = schedules.Where(c => c.StageID == filteringConditions.Stage);
+						schedules = schedules.Where(c => c.StageID <= filteringConditions.Stage);
 					}
 				}
 
@@ -169,6 +170,96 @@ namespace ESPKnockOff.Services.Getters {
 			} else {
 				return await _nextGetter.GetObjectSubObjects<T, Y>(id, filteringConditions, context);
 			}
+		}
+	}
+
+	public class ScheduleGetter : Getter
+	{
+		public override async Task<List<T>> GetObjects<T>(FilteringCoditions filteringConditions, ApplicationContext context)
+		{
+			if (typeof(T) == typeof(Schedule))
+			{
+				var schedules = context.LoadSheddingSlot.Join(
+					context.TimeCode,
+					slot => slot.TimeCodeID,
+					timecode => timecode.TimeCodeID,
+					(slot, timecode) => new Schedule
+					{
+						ScheduleID = slot.LoadSheddingSlotID,
+						DayOfMonthID = slot.DayOfMonthID,
+						StageID = slot.StageID,
+						StartTime = timecode.StartTime,
+						EndTime = timecode.EndTime,
+						SuburbClusterID = slot.SuburbClusterID
+					}
+				);
+
+				if (filteringConditions != null)
+				{
+					if (filteringConditions.StartTime != null)
+					{
+						schedules = schedules.Where(c => c.StartTime >= TimeSpan.Parse(filteringConditions.StartTime));
+					}
+
+					if (filteringConditions.Endtime != null)
+					{
+						schedules = schedules.Where(c => c.EndTime <= TimeSpan.Parse(filteringConditions.Endtime));
+					}
+
+					if (filteringConditions.Day != 0)
+					{
+						schedules = schedules.Where(c => c.DayOfMonthID == filteringConditions.Day);
+					}
+
+					if (filteringConditions.Stage != 0)
+					{
+						schedules = schedules.Where(c => c.StageID <= filteringConditions.Stage);
+					}
+				}
+
+				return (List<T>)Convert.ChangeType(schedules.ToList(), typeof(List<T>));
+			}
+			else
+			{
+				return await _nextGetter.GetObjects<T>(filteringConditions, context);
+			}
+		}
+
+		public override async Task<T> GetObjectById<T>(int id, ApplicationContext context)
+		{
+			if (typeof(T) == typeof(Schedule))
+			{
+				var loadSheddingSlot = await context.LoadSheddingSlot.FindAsync(id);
+
+				if (loadSheddingSlot == null)
+                {
+					return (T)Convert.ChangeType(null, typeof(T));
+				}
+
+				var schedule = new Schedule()
+				{
+					ScheduleID = loadSheddingSlot.LoadSheddingSlotID,
+					DayOfMonthID = loadSheddingSlot.DayOfMonthID,
+					StageID = loadSheddingSlot.StageID,
+					SuburbClusterID = loadSheddingSlot.SuburbClusterID,
+				};
+
+				var timeCode = await context.TimeCode.FindAsync(loadSheddingSlot.TimeCodeID);
+
+				schedule.StartTime = timeCode.StartTime;
+				schedule.EndTime = timeCode.EndTime;
+
+				return (T)Convert.ChangeType(schedule, typeof(T));
+			}
+			else
+			{
+				return await _nextGetter.GetObjectById<T>(id, context);
+			}
+		}
+
+		public override async Task<List<Y>> GetObjectSubObjects<T, Y>(int id, FilteringCoditions filteringConditions, ApplicationContext context)
+		{
+			return await _nextGetter.GetObjectSubObjects<T, Y>(id, filteringConditions, context);
 		}
 	}
 }
