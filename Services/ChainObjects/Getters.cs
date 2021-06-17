@@ -140,8 +140,8 @@ namespace ESPKnockOff.Services.Getters {
 						(slot, timecode) => new Schedule
 						{
 							ScheduleID = slot.LoadSheddingSlotID,
-							DayOfMonthID = slot.DayOfMonthID,
-							StageID = slot.StageID,
+							Day = slot.DayOfMonthID,
+							Stage = slot.StageID,
 							StartTime = timecode.StartTime,
 							EndTime = timecode.EndTime,
 							SuburbClusterID = slot.SuburbClusterID
@@ -158,11 +158,11 @@ namespace ESPKnockOff.Services.Getters {
 					}
 
 					if (filteringConditions.Day != 0) {
-						schedules = schedules.Where(c => c.DayOfMonthID == filteringConditions.Day);
+						schedules = schedules.Where(c => c.Day == filteringConditions.Day);
 					}
 
 					if (filteringConditions.Stage != 0) {
-						schedules = schedules.Where(c => c.StageID <= filteringConditions.Stage);
+						schedules = schedules.Where(c => c.Stage <= filteringConditions.Stage);
 					}
 				}
 
@@ -186,8 +186,8 @@ namespace ESPKnockOff.Services.Getters {
 					(slot, timecode) => new Schedule
 					{
 						ScheduleID = slot.LoadSheddingSlotID,
-						DayOfMonthID = slot.DayOfMonthID,
-						StageID = slot.StageID,
+						Day = slot.DayOfMonthID,
+						Stage = slot.StageID,
 						StartTime = timecode.StartTime,
 						EndTime = timecode.EndTime,
 						SuburbClusterID = slot.SuburbClusterID
@@ -208,12 +208,12 @@ namespace ESPKnockOff.Services.Getters {
 
 					if (filteringConditions.Day != 0)
 					{
-						schedules = schedules.Where(c => c.DayOfMonthID == filteringConditions.Day);
+						schedules = schedules.Where(c => c.Day == filteringConditions.Day);
 					}
 
 					if (filteringConditions.Stage != 0)
 					{
-						schedules = schedules.Where(c => c.StageID <= filteringConditions.Stage);
+						schedules = schedules.Where(c => c.Stage <= filteringConditions.Stage);
 					}
 				}
 
@@ -239,8 +239,8 @@ namespace ESPKnockOff.Services.Getters {
 				var schedule = new Schedule()
 				{
 					ScheduleID = loadSheddingSlot.LoadSheddingSlotID,
-					DayOfMonthID = loadSheddingSlot.DayOfMonthID,
-					StageID = loadSheddingSlot.StageID,
+					Day = loadSheddingSlot.DayOfMonthID,
+					Stage = loadSheddingSlot.StageID,
 					SuburbClusterID = loadSheddingSlot.SuburbClusterID,
 				};
 

@@ -96,9 +96,9 @@ namespace ESPKnockOff.Models
     {
         public int ScheduleID { get; set; }
 
-        public int DayOfMonthID { get; set; }
+        public int Day { get; set; }
 
-        public int StageID { get; set; }
+        public int Stage { get; set; }
 
         [JsonConverter(typeof(TimespanConverter))]
         [JsonProperty(TypeNameHandling = TypeNameHandling.All)]

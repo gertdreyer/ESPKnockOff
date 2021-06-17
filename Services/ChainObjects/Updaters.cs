@@ -168,8 +168,8 @@ namespace ESPKnockOff.Services.Updaters
 
                 var loadSheddingSlot = new LoadSheddingSlot()
                 {
-                    DayOfMonthID = schedule.DayOfMonthID,
-                    StageID = schedule.StageID,
+                    DayOfMonthID = schedule.Day,
+                    StageID = schedule.Stage,
                     SuburbClusterID = schedule.SuburbClusterID,
                     TimeCodeID = timeCodeID,
                 };
