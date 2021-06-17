@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +7,14 @@ using ESPKnockOff.Models;
 using ESPKnockOff.Services;
 using System.Net.Http;
 using ESPKnockOff.Models.Enums;
+using ESPKnockOff.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ESPKnockOff.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class Schedules : Controller
     {
         private readonly ApplicationContext _context;

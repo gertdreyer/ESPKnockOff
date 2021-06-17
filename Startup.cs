@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 using ESPKnockOff.Models;
 using ESPKnockOff.Services;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
+using ESPKnockOff.Data;
 
 namespace ESPKnockOff
 {
@@ -31,46 +33,55 @@ namespace ESPKnockOff
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
 
-            services.AddDbContext<ApplicationContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("ApplicationContext")));
-
+            services.AddTransient<InsertService>();
+			services.AddAuthentication()
+				.AddGoogle(options => {
+					IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+					options.ClientId = googleAuthNSection["ClientId"];
+					options.ClientSecret = googleAuthNSection["ClientSecret"];
+				});
+			services.AddMvc().AddRazorPagesOptions(options => {
+				options.Conventions.AddPageRoute("/", "");
+			});
 
             services.AddTransient<DatabaseService>();
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+			// Enable middleware to serve generated Swagger as a JSON endpoint.
+			app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+			// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+			// specifying the Swagger JSON endpoint.
+			app.UseSwaggerUI(c => {
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+			});
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+			if (env.IsDevelopment()) {
+				app.UseDeveloperExceptionPage();
+			} else {
+				app.UseExceptionHandler("/Home/Error");
+				app.UseHsts();
+			}
 
-            //app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 
-            app.UseDefaultFiles();
+			app.UseDefaultFiles();
 
-            app.UseStaticFiles();
+			app.UseStaticFiles();
 
-            app.UseRouting();
+			app.UseRouting();
 
-            app.UseAuthorization();
+			app.UseAuthentication();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
-    }
+			app.UseAuthorization();
+
+			app.UseEndpoints(endpoints => {
+				endpoints.MapControllers();
+				endpoints.MapRazorPages();
+			});
+		}
+	}
 }

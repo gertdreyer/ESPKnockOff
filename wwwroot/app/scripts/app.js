@@ -8,9 +8,9 @@ angular.module('todoApp', ['ngRoute'])
     }
     $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
 
-    $routeProvider.when("/Home", {
+    /*$routeProvider.when("/Home", {
         controller: "todoListCtrl",
         templateUrl: "/App/Views/TodoList.html",
-    }).otherwise({ redirectTo: "/Home" });
+    }).otherwise({ redirectTo: "/Home" });*/
 
     }]);
