@@ -33,7 +33,6 @@ namespace ESPKnockOff
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
 
-            services.AddTransient<InsertService>();
 			services.AddAuthentication()
 				.AddGoogle(options => {
 					IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
