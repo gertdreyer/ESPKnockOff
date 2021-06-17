@@ -7,28 +7,33 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ESPKnockOff.Models;
 using ESPKnockOff.Services;
+using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using ESPKnockOff.Data;
 
-namespace ESPKnockOff {
-	public class Startup {
+namespace ESPKnockOff
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-		public Startup(IConfiguration configuration) {
-			Configuration = configuration;
-		}
+        public IConfiguration Configuration { get; }
 
-		public IConfiguration Configuration { get; }
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers().AddNewtonsoftJson();
 
-		// This method gets called by the runtime. Use this method to add services to the container.
-		public void ConfigureServices(IServiceCollection services) {
-			services.AddControllers();
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
 
-			// Register the Swagger generator, defining 1 or more Swagger documents
-			services.AddSwaggerGen(c => {
-				c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-			});
-
-			services.AddTransient<InsertService>();
+            services.AddTransient<InsertService>();
 			services.AddAuthentication()
 				.AddGoogle(options => {
 					IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");

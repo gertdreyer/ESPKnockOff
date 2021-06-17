@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,10 +20,6 @@ namespace ESPKnockOff.Models
         [Required]
         [Display(Name = "Name")]
         public String Name { get; set; }
-
-
-        [IgnoreDataMember]
-        public virtual ICollection<Municipality> Municipality { get; set; }
     }
 
     public class Municipality
@@ -39,12 +36,7 @@ namespace ESPKnockOff.Models
         [DataMember(IsRequired = true)]
         [Required]
         public int ProvinceID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("ProvinceID")]
-        public virtual Province Province { get; set; }
 
-        [IgnoreDataMember]
-        public virtual ICollection<Suburb> Suburb { get; set; }
     }
 
     public class Suburb
@@ -61,16 +53,10 @@ namespace ESPKnockOff.Models
         [DataMember(IsRequired = true)]
         [Required]
         public int SuburbClusterID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("SuburbClusterID")]
-        public virtual SuburbCluster SuburbCluster { get; set; }
 
         [DataMember(IsRequired = true)]
         [Required]
         public int MunicipalityID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("MunicipalityID")]
-        public virtual Municipality Municipality { get; set; }
     }
 
     public class SuburbCluster
@@ -79,18 +65,13 @@ namespace ESPKnockOff.Models
         [Key]
         public int SuburbClusterID { get; set; }
 
-        [IgnoreDataMember]
-        public virtual ICollection<Suburb> Suburb { get; set; }
-
-        [IgnoreDataMember]
-        public virtual ICollection<Schedule> LoadSheddingSlot { get; set; }
     }
 
-    public class Schedule
+    public class LoadSheddingSlot
     {
         [DataMember]
         [Key]
-        public int ScheduleID { get; set; }
+        public int LoadSheddingSlotID { get; set; }
 
         [DataMember(IsRequired = true)]
         [Required]
@@ -105,16 +86,30 @@ namespace ESPKnockOff.Models
         [DataMember(IsRequired = true)]
         [Required]
         public int TimeCodeID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("TimeCodeID")]
-        public virtual TimeCode TimeCode { get; set; }
 
         [DataMember(IsRequired = true)]
         [Required]
         public int SuburbClusterID { get; set; }
-        [IgnoreDataMember]
-        [ForeignKey("SuburbClusterID")]
-        public virtual SuburbCluster SuburbCluster { get; set; }
+    }
+
+    public class Schedule
+    {
+        public int ScheduleID { get; set; }
+
+        public int DayOfMonthID { get; set; }
+
+        public int StageID { get; set; }
+
+        [JsonConverter(typeof(TimespanConverter))]
+        [JsonProperty(TypeNameHandling = TypeNameHandling.All)]
+        public TimeSpan StartTime { get; set; }
+
+        [JsonConverter(typeof(TimespanConverter))]
+        [JsonProperty(TypeNameHandling = TypeNameHandling.All)]
+        public TimeSpan EndTime { get; set; }
+
+        public int TimeCodeID { get; set; }
+
     }
 
     public class TimeCode
@@ -130,5 +125,23 @@ namespace ESPKnockOff.Models
         [DataMember]
         [Display(Name = "End Time")]
         public TimeSpan EndTime { get; set; }
+    }
+
+    public class TimespanConverter : JsonConverter<TimeSpan>
+    {
+        public const string TimeSpanFormatString = @"hh\:mm";
+
+        public override void WriteJson(JsonWriter writer, TimeSpan value, JsonSerializer serializer)
+        {
+            var timespanFormatted = $"{value.ToString(TimeSpanFormatString)}";
+            writer.WriteValue(timespanFormatted);
+        }
+
+        public override TimeSpan ReadJson(JsonReader reader, Type objectType, TimeSpan existingValue, bool hasExistingValue, JsonSerializer serializer)
+        {
+            TimeSpan parsedTimeSpan;
+            TimeSpan.TryParseExact((string)reader.Value, TimeSpanFormatString, null, out parsedTimeSpan);
+            return parsedTimeSpan;
+        }
     }
 }
