@@ -43,8 +43,8 @@ namespace ESPKnockOff
 			services.AddMvc().AddRazorPagesOptions(options => {
 				options.Conventions.AddPageRoute("/", "");
 			});
-
-            services.AddTransient<DatabaseService>();
+			services.AddSingleton<IConfiguration>(Configuration);
+			services.AddTransient<DatabaseService>();
 
         }
 
